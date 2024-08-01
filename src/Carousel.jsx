@@ -4,7 +4,7 @@ import { FaQuoteRight } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const Carousel = () => {
-    const [people, setPeople] = useState(list);
+    const [people, setPeople] = useState(longList);
     const [currentPerson, setCurrentPerson] = useState(0);
 
     const prevSlide = () => {
@@ -21,6 +21,15 @@ const Carousel = () => {
         });
     };
 
+    useEffect(() => {
+        let slideId = setInterval(() => {
+            nextSlide();
+        }, 2000);
+        return () => {
+            clearInterval(slideId);
+        };
+    }, [currentPerson]);
+
     return (
         <section className="slider-container">
             {people.map((person, personIndex) => {
@@ -32,7 +41,11 @@ const Carousel = () => {
                             transform: `translateX(${
                                 100 * (personIndex - currentPerson)
                             }%)`,
-                            opacity: personIndex === currentPerson ? 1 : 0
+                            opacity: personIndex === currentPerson ? 1 : 0,
+                            visibility:
+                                personIndex === currentPerson
+                                    ? 'visible'
+                                    : 'hidden'
                         }}
                         key={id}
                     >
